@@ -1,0 +1,269 @@
+const int IN1 = 7;
+const int IN2 = 8;
+const int IN3 = 9; // in 3 = pin 9
+const int IN4 = 11;
+const int ENA = 5;
+const int ENB = 6;
+const int STBY = 3;
+
+const int right_line_sensor = A0; // initialize right part of line sensor
+const int mid_line_sensor = A1; // initialize middle part of line sensor
+const int left_line_sensor = A2; // initialize left part of line sensor
+
+void setup() {
+  pinMode(IN1, OUTPUT);  // Output to motors.
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+  pinMode(STBY, OUTPUT);
+
+  pinMode(left_line_sensor, INPUT);  // Input from sensors.
+  pinMode(mid_line_sensor, INPUT);
+  pinMode(right_line_sensor, INPUT);
+
+  digitalWrite(STBY, HIGH);  // General motor power must be set to HIGH for all motors to function.
+  Serial.begin(9600);  // Begin serial monitor to log robot feedback.
+}
+void turnrightnode(){
+  digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
+  digitalWrite(IN2, LOW);  // Turns on the left motor(s).
+  digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+  digitalWrite(IN4, HIGH);
+  digitalWrite(STBY, HIGH);
+
+  analogWrite(ENA, 40);
+  analogWrite(ENB, 50);
+}
+
+void turnright(){
+  digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
+  digitalWrite(IN2, LOW);  // Turns on the left motor(s).
+  digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+  digitalWrite(IN4, HIGH);
+  digitalWrite(STBY, HIGH);
+
+  analogWrite(ENA, 40);
+  analogWrite(ENB, 50);
+}
+
+
+void turnleft(){
+  digitalWrite(IN1, LOW);  // Turns on the right motor(s).
+  digitalWrite(IN2, HIGH);  // Turns on the left motor(s).
+  digitalWrite(IN3, HIGH);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+  digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
+  digitalWrite(STBY, HIGH);
+
+  analogWrite(ENA, 50);
+  analogWrite(ENB, 40);
+}
+
+
+void turnleftnode(){
+  digitalWrite(IN1, LOW);  // Turns on the right motor(s).
+  digitalWrite(IN2, HIGH);  // Turns on the left motor(s).
+  digitalWrite(IN3, HIGH);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+  digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
+  digitalWrite(STBY, HIGH);
+
+  analogWrite(ENA, 50);
+  analogWrite(ENB, 40);
+}
+
+void drivebackward()
+{
+  digitalWrite(IN1, LOW);  // Turns on the right motor(s).
+  digitalWrite(IN2, LOW);  // Turns on the left motor(s).
+  digitalWrite(IN3, HIGH);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+  digitalWrite(IN4, HIGH);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
+  digitalWrite(STBY, HIGH);
+  analogWrite(ENA, 50);
+  analogWrite(ENB, 50);
+}
+
+void driveforward(){
+  digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
+  digitalWrite(IN2, HIGH);  // Turns on the left motor(s).
+  digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+  digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
+  digitalWrite(STBY, HIGH);
+  analogWrite(ENA, 50);
+  analogWrite(ENB, 50);
+}
+
+void stopmotion()
+{
+  digitalWrite(IN1, LOW);  // Turns on the right motor(s).
+  digitalWrite(IN2, LOW);  // Turns on the left motor(s).
+  digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+  digitalWrite(IN4, LOW);
+  digitalWrite(STBY, LOW);
+
+}
+
+void loop() {
+  int L = analogRead(left_line_sensor);
+  int M = analogRead(mid_line_sensor);
+  int R = analogRead(right_line_sensor); // assigns initals to the sensor numbers to make code more readable
+
+  //while not on a node, drive forward
+  analogWrite(ENA, 50);
+  analogWrite(ENB, 50);
+
+
+  while (!(L > 900 && M > 900 && R > 900)){
+    L = analogRead(left_line_sensor);
+    M = analogRead(mid_line_sensor);
+    R = analogRead(right_line_sensor); // L, M, R have to be declared in every loop so it updates
+
+
+    if (M < 700 && L < 700) {
+      turnright();
+      Serial.println("too left");
+      Serial.println("left: " + (String)L + " middle: " + (String)M + " right: " + (String)R);
+      //delay(500);
+    }
+    else if (M < 700 && R < 700) {
+      turnleft();
+      Serial.println("too right");
+      Serial.println("left: " + (String)L + " middle: " + (String)M + " right: " + (String)R);
+      //delay(500);
+    }
+    else {
+      driveforward();
+      Serial.println("left: " + (String)L + " middle: " + (String)M + " right: " + (String)R);
+      //delay(500);
+    }
+
+    if(L > 900 && M > 900 && R > 900){
+      L = analogRead(left_line_sensor);
+      M = analogRead(mid_line_sensor);
+      R = analogRead(right_line_sensor); // L, M, R have to be declared in every loop so it updates
+        
+      Serial.println("reached node");
+      break;
+    }
+
+  }
+
+  stopmotion();
+  delay(1000);
+
+  while (!(L<700 && M< 700 && R<700)){ //if not on white
+    turnleft();
+    if(L>700 && M>700){ //if left & middle on black
+      Serial.println("reached a line");
+      return;
+    }
+  }
+  if(L<700 && M< 700 && R<700){ //if all on white
+    stopmotion();
+    while (!(L>700 && M>700)) { // while not on line
+        turnright();
+    }
+    driveforward();
+  }
+
+}
+
+
+
+//__________________________________________________//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
+//  digitalWrite(IN2, HIGH);  // Turns on the left motor(s).
+//  digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+//  digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
+//   analogWrite(ENA, 160);  // Sets motor power [0, 255].
+//  analogWrite(ENB, 160);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  delay(1000);  // Drive for three seconds.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  analogWrite(ENA, 0); // analog = range
+//  analogWrite(ENB, 0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
