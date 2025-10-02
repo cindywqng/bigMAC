@@ -1,4 +1,23 @@
+
+
+
+
+
+
+
+
 #include <Servo.h>  // Must include servo library to use the servo.
+
+
+
+
+
+
+
+
+
+
+
 
 const int IN1 = 7;
 const int IN2 = 8;
@@ -8,7 +27,69 @@ const int ENA = 5;
 const int ENB = 6;
 const int STBY = 3;
 
+
+
+
 const int servo_pin = 10;  // Or 11 depending on the pin you use.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const int right_line_sensor = A0; // initialize right part of line sensor
 const int mid_line_sensor = A1; // initialize middle part of line sensor
@@ -16,7 +97,116 @@ const int left_line_sensor = A2; // initialize left part of line sensor
 const int ir_sensor = A5;
 
 
+
+
+
+
+
+
 Servo my_servo;  // Create a servo object to control the servo.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void setup() {
 pinMode(IN1, OUTPUT);  // Output to motors. Right motor
@@ -27,6 +217,13 @@ pinMode(ENA, OUTPUT); //speeds
 pinMode(ENB, OUTPUT);
 pinMode(STBY, OUTPUT);
 
+
+
+
+
+
+
+
 pinMode(left_line_sensor, INPUT);  // Input from sensors.
 pinMode(mid_line_sensor, INPUT);
 pinMode(right_line_sensor, INPUT);
@@ -34,9 +231,18 @@ pinMode(ir_sensor, INPUT);
 my_servo.attach(servo_pin);  // Attaches servo pin to the servo object.
 
 
+
+
 digitalWrite(STBY, HIGH);  // General motor power must be set to HIGH for all motors to function.
 Serial.begin(9600);  // Begin serial monitor to log robot feedback.
 }
+
+
+
+
+
+
+
 
 void turnrightnode(){ //turn right at the node (separate from line sensing code)
 digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
@@ -44,9 +250,31 @@ digitalWrite(IN2, LOW);  // Turns on the left motor(s).
 digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
 digitalWrite(IN4, HIGH);
 
+
+
+
+
+
+
+
 analogWrite(ENA, 85); //speed
 analogWrite(ENB, 85);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void turnright(){ //turn right when on line
 digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
@@ -54,9 +282,23 @@ digitalWrite(IN2, HIGH);  // Turns on the left motor(s).
 digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
 digitalWrite(IN4, LOW);
 
+
+
+
+
+
+
+
 analogWrite(ENA, 130); //speed
 analogWrite(ENB, 50);
 }
+
+
+
+
+
+
+
 
 void turnleft(){ //turn left when on line
 digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
@@ -64,9 +306,23 @@ digitalWrite(IN2, HIGH);  // Turns on the left motor(s).
 digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
 digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
 
+
+
+
+
+
+
+
 analogWrite(ENA, 50); //speed
 analogWrite(ENB, 130);
 }
+
+
+
+
+
+
+
 
 void turnleftfire(){ //turn left when sense fire
 digitalWrite(IN1, LOW);  // Turns on the right motor(s).
@@ -75,9 +331,17 @@ digitalWrite(IN3, HIGH);  // IN3 must always be opposite of IN1. If IN1 is HIGH,
 digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
 
 
+
+
+
+
+
+
 analogWrite(ENA, 40); //speed
 analogWrite(ENB, 55);
 }
+
+
 
 
 void turnrightfire(){ //turn left when sense fire
@@ -86,9 +350,23 @@ digitalWrite(IN2, LOW);  // Turns on the left motor(s).
 digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
 digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
 
+
+
+
+
+
+
+
 analogWrite(ENA, 55); //speed
 analogWrite(ENB, 40);
 }
+
+
+
+
+
+
+
 
 void turnleftnode(){ //turns left only at node
 digitalWrite(IN1, LOW);  // Turns on the right motor(s). for
@@ -97,9 +375,43 @@ digitalWrite(IN3, HIGH);  // IN3 must always be opposite of IN1. If IN1 is HIGH,
 digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low bac
 
 
+
+
+
+
+
+
 analogWrite(ENA, 85); //speed
 analogWrite(ENB, 85);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+void drivebackward()
+{
+digitalWrite(IN1, LOW);  // Turns on the right motor(s).
+digitalWrite(IN2, LOW);  // Turns on the left motor(s).
+digitalWrite(IN3, HIGH);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+digitalWrite(IN4, HIGH);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
+analogWrite(ENA, 25);
+analogWrite(ENB, 25);
+}
+
+
+
+
+
+
+
 
 void driveforward(){
 digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
@@ -109,6 +421,12 @@ digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forwar
 analogWrite(ENA, 46);
 analogWrite(ENB, 46);
 }
+
+
+
+
+
+
 
 
 void driveforwardnode(){
@@ -121,11 +439,31 @@ analogWrite(ENB, 50);
 }
 
 
+
+
+
+
+
+
+
+
+
+
 void stopmotion() //stop
 {
 analogWrite(ENA, 0); //set speed to 0 to avoid residual current from motors?
 analogWrite(ENB, 0);
 }
+
+
+
+
+
+
+
+
+
+
 
 
 void servomove()
@@ -134,10 +472,26 @@ my_servo.write(0);  // Servo moves to position 1000.
 }
 
 
+
+
+
+
+
+
 void servonormal()
 {
 my_servo.write(180);  // Servo moves to position 1000.
 }
+
+
+
+
+
+
+
+
+
+
 
 
 void loop() {
@@ -145,10 +499,22 @@ void loop() {
 // analogWrite(ENB, 20);
 
 
+
+
 servonormal();
+
+
+
 
 while (!(analogRead(left_line_sensor) > 900 && analogRead(mid_line_sensor) > 900 && analogRead(right_line_sensor) > 900)) {
 // While not on a node, drive forward
+
+
+
+
+
+
+
 
 if (analogRead(left_line_sensor) < 680) {
  // If middle and left sensor are on white, turn right
@@ -174,19 +540,33 @@ else {
                 " right: " + String(analogRead(right_line_sensor)));
 }
 
+
+
+
 if (analogRead(ir_sensor) < 800){ // checks for fire
 Serial.println("fire");
 stopmotion();
 delay(500);
 
+
+
+
+
+
+
+
   while (analogRead(ir_sensor) > 610){ // greater than 600
     Serial.println(analogRead(ir_sensor));
+
+
 
 
     if (analogRead(ir_sensor) <= 750){
     turnleftfire();
     Serial.println("left");
     }
+
+
 
 
     else if (analogRead(ir_sensor) >= 850){
@@ -206,6 +586,8 @@ delay(500);
   }
 
 
+
+
   while ((analogRead(ir_sensor) < 610)){
     Serial.println(analogRead(ir_sensor));
     stopmotion();
@@ -217,7 +599,17 @@ delay(500);
   servonormal();
 }
 
+
+
+
 }
+
+
+
+
+
+
+
 
 Serial.println("reached node");
 stopmotion();
@@ -227,6 +619,9 @@ Serial.println("forward");
 delay(700);
 turnleftnode();
 delay(700);
+
+
+
 
 //while (!(analogRead(left_line_sensor) < 700 && analogRead(mid_line_sensor) < 670 && //analogRead(right_line_sensor) < 700)) {
 // If not   on white, turn left to find line
@@ -244,21 +639,52 @@ delay(700);
 //}
 //}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if (analogRead(left_line_sensor) < 700 && analogRead(mid_line_sensor) < 670 && analogRead(right_line_sensor) < 700) {
 // if All on white — stop and turn right to find line
+
+
+
 
 if (analogRead(ir_sensor) < 800){ // checks for fire
 Serial.println("fire");
 stopmotion();
 delay(500);
 
+
+
+
+
+
+
+
   while (analogRead(ir_sensor) > 610){ // greater than 600
     Serial.println(analogRead(ir_sensor));
+
+
+
 
     if (analogRead(ir_sensor) <= 750){
     turnleftfire();
     Serial.println("left");
     }
+
+
+
 
     else if (analogRead(ir_sensor) >= 850){
       turnrightfire();
@@ -270,7 +696,14 @@ delay(500);
       Serial.println("forward");
       driveforward();
     }
+
+
+
+
   }
+
+
+
 
   while ((analogRead(ir_sensor) < 610)){
     Serial.println(analogRead(ir_sensor));
@@ -283,8 +716,18 @@ delay(500);
   servonormal();
 }
 
-=
+
 }
+
+
+
+
+
+
+
+
+
+
 
 
 Serial.println("left: " + String(analogRead(left_line_sensor)) +
@@ -305,4 +748,18 @@ return;
 }
 
 
+
+
+
+
+
+
+
+
+//  digitalWrite(IN1, HIGH);  // Turns on the right motor(s).
+//  digitalWrite(IN2, HIGH);  // Turns on the left motor(s).
+//  digitalWrite(IN3, LOW);  // IN3 must always be opposite of IN1. If IN1 is HIGH, IN3 is LOW, and vice versa.
+//  digitalWrite(IN4, LOW);  // IN4 must always be opposite of IN2.  makes go forward. digital = high or low
+//   analogWrite(ENA, 160);  // Sets motor power [0, 255].
+//  analogWrite
 
